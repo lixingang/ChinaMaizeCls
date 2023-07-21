@@ -50,15 +50,22 @@ for(var i in prov_list){
   im_dict[prov_list[i]] = CHINA.clip(t_shp).uint8()
 }
 //处理 
-for(var i in prov_list){
+
   var kernel = ee.Kernel.circle({radius: 1});
   var t_shp = shapefile.filter(ee.Filter.eq('PROVCODE', prov_list[i]))
   var ccp_mask = ccp.gt(0).clip(t_shp)
   ccp_mask = ccp_mask.focal_max({kernel: kernel, iterations: 1}).uint8();
   im_dict[prov_list[i]] = im_dict[prov_list[i]].multiply(ccp_mask);
-  Map.addLayer(im_dict[prov_list[i]] )
+
+
+  if(["620000","630000","640000","650000"].indexOf(prov_list[i]) != -1){
+  //   //mask for xibei xibei西北 
+    var t_shp = shapefile.filter(ee.Filter.eq('PROVCODE', prov_list[i]))
+    var ccp_mask = ccp.gt(0).clip(t_shp)
+    ccp_mask = ccp_mask.focal_max({kernel: kernel, iterations: 3}).uint8();
+    im_dict[prov_list[i]] = im_dict[prov_list[i]].multiply(ccp_mask);
   }
-  
+
   Export.image.toDrive({
     image:im_dict[prov_list[i]],
     description:prov_list[i]+'_2019',
@@ -105,7 +112,7 @@ for(var i=0;i<prov_list.length;i++)
   var area = img.reduceRegions({
       collection: target_shp,
       reducer: ee.Reducer.sum(),
-      scale: 100,
+      scale: 10,
     });
   feature_list.push(area)
 }
