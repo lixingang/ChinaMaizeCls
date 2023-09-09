@@ -59,7 +59,7 @@ var len=5320
 //提取数据
 var withRandom = Sample.randomColumn('random');
 
-var split = 0.7; 
+var split = 0.8; 
 var trainingPartition = withRandom.filter(ee.Filter.lt('random', split));
 var testingPartition = withRandom.filter(ee.Filter.gte('random', split));
 var trainingPartition = trainingPartition.randomColumn('Index');
