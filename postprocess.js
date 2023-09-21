@@ -54,8 +54,8 @@ for(var i in prov_list){
   var kernel = ee.Kernel.circle({radius: 1});
   var t_shp = shapefile.filter(ee.Filter.eq('PROVCODE', prov_list[i]))
   var ccp_mask = ccp.gt(0).clip(t_shp)
-  ccp_mask = ccp_mask.focal_max({kernel: kernel, iterations: 1}).uint8();
-  im_dict[prov_list[i]] = im_dict[prov_list[i]].multiply(ccp_mask);
+  // ccp_mask = ccp_mask.focal_max({kernel: kernel, iterations: 1}).uint8();
+  // im_dict[prov_list[i]] = im_dict[prov_list[i]].multiply(ccp_mask);
 
 
   if(["620000","630000","640000","650000"].indexOf(prov_list[i]) != -1){
